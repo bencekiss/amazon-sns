@@ -194,6 +194,34 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Process SNS message
+     *
+     * @param string $body
+     */
+    public function processMessage($body)
+    {
+        $data = json_decode($body, true);
+
+        if (isset($data['Type'])) {
+            return false;
+        }
+
+        switch ($data['Type']) {
+            case self::MESSAGE_TYPE_SUBSCRIPTION_CONFIRMATION:
+                $this->confirmSubscription($data['Token']);
+                break;
+            case self::MESSAGE_TYPE_NOTIFICATION:
+                $this->_eventManager->dispatch(
+                    self::SNS_EVENT_NOTIFICATION,
+                    [
+                        'notification' => json_decode($data['Message'], true)
+                    ]
+                );
+                break;
+        }
+    }
+
+    /**
      * Subscribe to SNS topic
      *
      * @return \Guzzle\Service\Resource\Model
