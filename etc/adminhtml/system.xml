@@ -25,7 +25,7 @@
                     <label>Protocol</label>
                     <source_model>ShopGo\AmazonSns\Model\System\Config\Source\Protocol</source_model>
                 </field>
-                <field id="topic-arn" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="topic_arn" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Topic ARN</label>
                 </field>
             </group>
