@@ -16,12 +16,20 @@ class Config extends \Magento\Framework\Model\AbstractModel
     public $systemConfig;
 
     /**
+     * @var Config\File
+     */
+    public $fileConfig;
+
+    /**
      * @param Config\System $systemConfig
+     * @param Config\File $fileConfig
      */
     public function __construct(
-        Config\System $systemConfig
+        Config\System $systemConfig,
+        Config\File $fileConfig
     ) {
        $this->systemConfig = $systemConfig;
+       $this->fileConfig   = $fileConfig;
     }
 
     /**
@@ -32,7 +40,8 @@ class Config extends \Magento\Framework\Model\AbstractModel
      */
     public function getConfigData($path)
     {
-        return $this->systemConfig->getConfigData($path);
+        $config = $this->fileConfig->getConfigElementValue($path);
+        return !$config ? $this->systemConfig->getConfigData($path) : $config;
     }
 
     /**
