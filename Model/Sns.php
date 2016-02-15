@@ -108,7 +108,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     protected function getVersion()
     {
-        $version = $this->getConfigData(self::XML_PATH_GENERAL_VERSION);
+        $version = $this->_config->getConfigData(self::XML_PATH_GENERAL_VERSION);
         return !$version ? self::VERSION : $version;
     }
 
@@ -119,7 +119,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     protected function getRegion()
     {
-        return $this->getConfigData(self::XML_PATH_GENERAL_REGION);
+        return $this->_config->getConfigData(self::XML_PATH_GENERAL_REGION);
     }
 
     /**
@@ -129,7 +129,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     protected function getProtocol()
     {
-        return $this->getConfigData(self::XML_PATH_GENERAL_PROTOCOL);
+        return $this->_config->getConfigData(self::XML_PATH_GENERAL_PROTOCOL);
     }
 
     /**
@@ -141,7 +141,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     {
         return $this->_topicArn
             ? $this->_topicArn
-            : $this->getConfigData(self::XML_PATH_GENERAL_TOPIC_ARN);
+            : $this->_config->getConfigData(self::XML_PATH_GENERAL_TOPIC_ARN);
     }
 
     /**
@@ -151,7 +151,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     protected function getAwsKey()
     {
-        return $this->getConfigData(self::XML_PATH_CREDENTIALS_AWS_KEY);
+        return $this->_config->getConfigData(self::XML_PATH_CREDENTIALS_AWS_KEY);
     }
 
     /**
@@ -161,7 +161,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     protected function getAwsSecret()
     {
-        return $this->getConfigData(self::XML_PATH_CREDENTIALS_AWS_SECRET);
+        return $this->_config->getConfigData(self::XML_PATH_CREDENTIALS_AWS_SECRET);
     }
 
     /**
