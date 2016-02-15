@@ -197,6 +197,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * Process SNS message
      *
      * @param string $body
+     * @return boolean|void
      */
     public function processMessage($body)
     {
