@@ -32,7 +32,7 @@ class Endpoint extends Action\Action
      */
     public function execute()
     {
-        $message = file_get_contents('php://input');
+        $message = $this->getRequest()->getContent();
         $this->_sns->processMessage($message);
     }
 }
