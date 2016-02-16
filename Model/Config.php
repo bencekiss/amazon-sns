@@ -47,10 +47,40 @@ class Config extends \Magento\Framework\Model\AbstractModel
     /**
      * Set config data
      *
-     * @param array $configData
+     * @param string $path
+     * @param string $value
+     * @return boolean
      */
-    public function setConfigData($configData = [])
+    public function setConfigData($path, $value)
     {
-        $this->systemConfig->setConfigData($configData);
+        $result = false;
+
+        try {
+            $path = explode('/', $path);
+
+            $group = [
+                $path[1] => [
+                    'fields' => [
+                        $path[2] => [
+                            'value' => $value
+                        ]
+                    ]
+                ]
+            ];
+
+            $configData = [
+                'section' => $path[0],
+                'website' => null,
+                'store'   => null,
+                'groups'  => $group
+            ];
+
+            $this->systemConfig->setConfigData($configData);
+
+            $result = true;
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (\Exception $e) {}
+
+        return $result;
     }
 }
