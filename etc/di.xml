@@ -10,6 +10,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="createTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\CreateTopic</item>
+                <item name="subscribe" xsi:type="object">ShopGo\AmazonSns\Console\Command\Subscribe</item>
             </argument>
         </arguments>
     </type>
