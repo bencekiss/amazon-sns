@@ -80,6 +80,11 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_sns;
 
     /**
+     * @var MessageValidator
+     */
+    protected $_messageValidator;
+
+    /**
      * @var Config
      */
     protected $_config;
@@ -101,6 +106,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->_config = $config;
         $this->_sns = SnsClient::factory($this->getConfig());
+        $this->_messageValidator = $messageValidator;
         $this->_storeManager = $storeManager;
     }
 
@@ -206,6 +212,17 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Verify SNS message signature
+     *
+     * @return boolean
+     */
+    public function verifyMessageSignature()
+    {
+        $message = Message::fromRawPostData();
+        return $this->_messageValidator->isValid($message);
+    }
+
+    /**
      * Process SNS message
      *
      * @param string $body
@@ -213,6 +230,10 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function processMessage($body)
     {
+        if (!$this->verifyMessageSignature()) {
+            return false;
+        }
+
         $data = json_decode($body, true);
 
         if (isset($data['Type'])) {
