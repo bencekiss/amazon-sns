@@ -85,6 +85,11 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_config;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @var string
      */
     protected $_topicArn;
@@ -95,10 +100,12 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function __construct(
         MessageValidator $messageValidator,
-        Config $config
+        Config $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_config = $config;
         $this->_sns = SnsClient::factory($this->getConfig());
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -190,7 +197,8 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function getEndpoint()
     {
-        return self::ENDPOINT_PATH;
+        $baseUrl = $this->_storeManager->getStore()->getBaseUrl();
+        return $baseUrl . self::ENDPOINT_PATH;
     }
 
     /**
