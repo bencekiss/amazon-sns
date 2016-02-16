@@ -90,11 +90,6 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var string
-     */
-    protected $_topicArn;
-
-    /**
      * @param MessageValidator $messageValidator
      * @param Config $config
      */
@@ -146,9 +141,17 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function getTopicArn()
     {
-        return $this->_topicArn
-            ? $this->_topicArn
-            : $this->_config->getConfigData(self::XML_PATH_GENERAL_TOPIC_ARN);
+        return $this->_config->getConfigData(self::XML_PATH_GENERAL_TOPIC_ARN);
+    }
+
+    /**
+     * Set topic ARN
+     *
+     * @param string $topicArn
+     */
+    public function setTopicArn($topicArn)
+    {
+        $this->_config->setConfigData(self::XML_PATH_GENERAL_TOPIC_ARN, $topicArn);
     }
 
     /**
@@ -228,6 +231,29 @@ class Sns extends \Magento\Framework\Model\AbstractModel
                 );
                 break;
         }
+    }
+
+    /**
+     * Create SNS topic
+     *
+     * @return \Guzzle\Service\Resource\Model
+     */
+    public function createTopic()
+    {
+        $baseUrl = $this->_storeManager->getStore()->getBaseUrl();
+        $topicName = substr($baseUrl, strpos($baseUrl, '://') + 3, strlen($baseUrl));
+        $topicName = str_replace('/', '_', rtrim($topicName, '/'));
+        $topicName = str_replace('.', '_', $topicName);
+
+        $result = $this->_sns->createTopic([
+            'Name' => $topicName
+        ]);
+
+        if ($topicArn = $result->get('TopicArn')) {
+            $this->setTopicArn($topicArn);
+        }
+
+        return $result;
     }
 
     /**
