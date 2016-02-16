@@ -20,7 +20,7 @@ class System extends \Magento\Framework\Model\AbstractModel
      */
     public function __construct(\Magento\Config\Model\Config\Factory $configFactory)
     {
-       $this->_configFactory = $configFactory;
+        $this->_configFactory = $configFactory;
     }
 
     /**

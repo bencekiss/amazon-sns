@@ -28,8 +28,8 @@ class Config extends \Magento\Framework\Model\AbstractModel
         Config\System $systemConfig,
         Config\File $fileConfig
     ) {
-       $this->systemConfig = $systemConfig;
-       $this->fileConfig   = $fileConfig;
+        $this->systemConfig = $systemConfig;
+        $this->fileConfig   = $fileConfig;
     }
 
     /**

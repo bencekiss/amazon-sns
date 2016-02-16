@@ -97,8 +97,8 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         MessageValidator $messageValidator,
         Config $config
     ) {
-       $this->_config = $config;
-       $this->_sns = SnsClient::factory($this->getConfig());
+        $this->_config = $config;
+        $this->_sns = SnsClient::factory($this->getConfig());
     }
 
     /**
