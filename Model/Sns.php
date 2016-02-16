@@ -92,6 +92,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     /**
      * @param MessageValidator $messageValidator
      * @param Config $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         MessageValidator $messageValidator,
