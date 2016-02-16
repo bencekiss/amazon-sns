@@ -236,10 +236,6 @@ class Sns extends \Magento\Framework\Model\AbstractModel
 
         $data = json_decode($body, true);
 
-        if (isset($data['Type'])) {
-            return false;
-        }
-
         switch ($data['Type']) {
             case self::MESSAGE_TYPE_SUBSCRIPTION_CONFIRMATION:
                 $this->confirmSubscription($data['Token']);
