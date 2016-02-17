@@ -45,6 +45,11 @@
                     <button_label>Run</button_label>
                     <frontend_model>ShopGo\AmazonSns\Block\Adminhtml\System\Config\CreateTopic</frontend_model>
                 </field>
+                <field id="subscribe" translate="label button_label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Subscribe</label>
+                    <button_label>Run</button_label>
+                    <frontend_model>ShopGo\AmazonSns\Block\Adminhtml\System\Config\Subscribe</frontend_model>
+                </field>
             </group>
         </section>
     </system>
