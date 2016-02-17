@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright © 2015 ShopGo. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \ShopGo\AmazonSns\Block\Adminhtml\System\Config\CreateTopic
+ */
+?>
+<script>
+require([
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(alert) {
+
+//<![CDATA[
+    function createTopic() {
+        var message = $('create_topic_result');
+
+        new Ajax.Request('<?php /* @escapeNotVerified */ echo $block->getAjaxUrl() ?>', {
+            onSuccess: function(response) {
+                var result = '<?php /* @escapeNotVerified */ echo __('Error during SNS topic creation.') ?>';
+
+                try {
+                    if (response.responseText.isJSON()) {
+                        response = response.responseText.evalJSON();
+                        result   = response.message;
+                    }
+
+                    alert({
+                        content: response.message
+                    });
+                } catch (e) {
+                    alert({
+                        content: result
+                    });
+                }
+            }
+        });
+    }
+
+    window.createTopic = createTopic;
+//]]>
+
+});
+</script>
+<div class="actions actions-create-topic">
+    <button onclick="javascript:createTopic(); return false;" class="action-create-topic" type="button" id="<?php echo $block->getHtmlId() ?>">
+        <span><?php echo $block->escapeHtml($block->getButtonLabel()) ?></span>
+    </button>
+</div>

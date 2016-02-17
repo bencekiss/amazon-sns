@@ -38,6 +38,14 @@
                     <label>AWS Secret</label>
                 </field>
             </group>
+            <group id="actions" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Actions</label>
+                <field id="create_topic" translate="label button_label" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Create Topic</label>
+                    <button_label>Run</button_label>
+                    <frontend_model>ShopGo\AmazonSns\Block\Adminhtml\System\Config\CreateTopic</frontend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>
