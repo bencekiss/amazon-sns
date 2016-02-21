@@ -90,6 +90,11 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_config;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $_eventManager;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -97,16 +102,19 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     /**
      * @param MessageValidator $messageValidator
      * @param Config $config
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         MessageValidator $messageValidator,
         Config $config,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_config = $config;
         $this->_sns = SnsClient::factory($this->getConfig());
         $this->_messageValidator = $messageValidator;
+        $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
     }
 
