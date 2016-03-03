@@ -22,7 +22,6 @@
                     <xs:element ref="version"/>
                     <xs:element ref="region"/>
                     <xs:element ref="protocol"/>
-                    <xs:element ref="topic_arn"/>
                 </xs:choice>
             </xs:sequence>
         </xs:complexType>
@@ -48,14 +47,6 @@
         <xs:annotation>
             <xs:documentation>
                 Protocol Resource. Recursive complex type
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-
-    <xs:element name="topic_arn">
-        <xs:annotation>
-            <xs:documentation>
-                Topic ARN Resource. Recursive complex type
             </xs:documentation>
         </xs:annotation>
     </xs:element>

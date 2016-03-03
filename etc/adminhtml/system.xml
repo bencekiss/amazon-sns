@@ -25,9 +25,6 @@
                     <label>Protocol</label>
                     <source_model>ShopGo\AmazonSns\Model\System\Config\Source\Protocol</source_model>
                 </field>
-                <field id="topic_arn" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Topic ARN</label>
-                </field>
             </group>
             <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Credentials</label>
@@ -36,19 +33,6 @@
                 </field>
                 <field id="aws_secret" translate="label" type="obscure" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>AWS Secret</label>
-                </field>
-            </group>
-            <group id="actions" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Actions</label>
-                <field id="create_topic" translate="label button_label" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Create Topic</label>
-                    <button_label>Run</button_label>
-                    <frontend_model>ShopGo\AmazonSns\Block\Adminhtml\System\Config\CreateTopic</frontend_model>
-                </field>
-                <field id="subscribe" translate="label button_label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Subscribe</label>
-                    <button_label>Run</button_label>
-                    <frontend_model>ShopGo\AmazonSns\Block\Adminhtml\System\Config\Subscribe</frontend_model>
                 </field>
             </group>
         </section>

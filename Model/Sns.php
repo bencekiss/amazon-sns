@@ -169,26 +169,6 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get topic ARN
-     *
-     * @return string
-     */
-    public function getTopicArn()
-    {
-        return $this->_config->getConfigData(self::XML_PATH_GENERAL_TOPIC_ARN);
-    }
-
-    /**
-     * Set topic ARN
-     *
-     * @param string $topicArn
-     */
-    public function setTopicArn($topicArn)
-    {
-        $this->_config->setConfigData(self::XML_PATH_GENERAL_TOPIC_ARN, $topicArn);
-    }
-
-    /**
      * Get AWS key
      *
      * @return string
