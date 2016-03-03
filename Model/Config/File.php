@@ -64,7 +64,7 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
         \Magento\Config\Model\Config\Structure\Converter $converter,
         SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'config.xml',
+        $fileName = '',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
@@ -216,12 +216,12 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * Get config element value
+     * Get config element
      *
      * @param array|string $element
-     * @return string|null
+     * @return DOMElement|null
      */
-    public function getConfigElementValue($element)
+    public function getConfigElement($element)
     {
         if (!$this->_configFileExists() || !$this->_validateDom()) {
             return null;
@@ -238,6 +238,37 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
 
         $element = $this->_getDomXpathValue($this->_getConfigXpath($element));
 
-        return $element->item(0) !== null ? $element->item(0)->nodeValue : null;
+        return $element->item(0);
+    }
+
+    /**
+     * Get config element attribute
+     *
+     * @param array|string $element
+     * @param string $attributeName
+     * @return string|null
+     */
+    public function getConfigElementAttribute($element, $attributeName)
+    {
+        $configElement = $this->getConfigElement($element);
+
+        return $configElement !== null
+            ? $configElement->getAttribute($attributeName)
+            : null;
+    }
+
+    /**
+     * Get config element value
+     *
+     * @param array|string $element
+     * @return string|null
+     */
+    public function getConfigElementValue($element)
+    {
+        $configElement = $this->getConfigElement($element);
+
+        return $configElement !== null
+            ? $configElement->nodeValue
+            : null;
     }
 }

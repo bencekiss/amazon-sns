@@ -6,6 +6,22 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="ShopGo\AmazonSns\Model\Topic\Config\SchemaLocator" type="ShopGo\AmazonSns\Model\Config\SchemaLocator">
+        <arguments>
+            <argument name="fileName" xsi:type="string">topic.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Topic\Config\File" type="ShopGo\AmazonSns\Model\Config\File">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">topic.xml</argument>
+        </arguments>
+    </virtualType>
+    <type name="ShopGo\AmazonSns\Console\Command\Subscribe">
+        <arguments>
+            <argument name="fileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">

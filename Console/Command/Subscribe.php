@@ -18,25 +18,43 @@ use Magento\Framework\App\State;
 class Subscribe extends Command
 {
     /**
+     * Topic attribute argument
+     */
+    const TOPIC_ATTRIBUTE_ARGUMENT = 'topic_attribute';
+
+    /**
+     * Topic attribute value argument
+     */
+    const TOPIC_ATTRIBUTE_VALUE_ARGUMENT = 'topic_attribute_value';
+
+    /**
      * @var State
      */
     private $_state;
 
     /**
-     * @var \ShopGo\AmazonSns\Model\SnsFactory
+     * @var \ShopGo\AmazonSns\Model\TopicFactory
      */
-    private $_snsFactory;
+    private $_topicFactory;
+
+    /**
+     * @var \Magento\Framework\Config\ReaderInterface
+     */
+    private $_fileConfig;
 
     /**
      * @param State $state
-     * @param \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
+     * @param \ShopGo\AmazonSns\Model\TopicFactory $topicFactory
+     * @param \ShopGo\AmazonSns\Model\Config\File $fileConfig
      */
     public function __construct(
         State $state,
-        \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
+        \ShopGo\AmazonSns\Model\TopicFactory $topicFactory,
+        \ShopGo\AmazonSns\Model\Config\File $fileConfig
     ) {
         $this->_state = $state;
-        $this->_snsFactory = $snsFactory;
+        $this->_topicFactory = $topicFactory;
+        $this->_fileConfig = $fileConfig;
         parent::__construct();
     }
 
@@ -46,7 +64,19 @@ class Subscribe extends Command
     protected function configure()
     {
         $this->setName('amazon-sns:subscribe')
-            ->setDescription('Subscribe to SNS topic command');
+            ->setDescription('Subscribe to SNS topic command')
+            ->setDefinition([
+                new InputArgument(
+                    self::TOPIC_ATTRIBUTE_ARGUMENT,
+                    InputArgument::REQUIRED,
+                    'Topic attribute'
+                ),
+                new InputArgument(
+                    self::TOPIC_ATTRIBUTE_VALUE_ARGUMENT,
+                    InputArgument::REQUIRED,
+                    'Topic attribute value'
+                )
+            ]);
 
         parent::configure();
     }
@@ -58,9 +88,41 @@ class Subscribe extends Command
     {
         $this->_state->setAreaCode('adminhtml');
 
-        $result = $this->_snsFactory->create()->subscribe();
+        $topicAttribute = $input->getArgument(self::TOPIC_ATTRIBUTE_ARGUMENT);
+        $topicAttributeValue = $input->getArgument(self::TOPIC_ATTRIBUTE_VALUE_ARGUMENT);
 
-        $subscriptionArn = $result->get('SubscriptionArn');
+        $subscriptionArn = '';
+        $topic = $this->_topicFactory->create();
+        $topicArn = '';
+        $isTopicActive = false;
+
+        $topicConfigData = [
+            'topic' => [],
+            'item' => ['attributes' => [$topicAttribute => $topicAttributeValue]]
+        ];
+
+        $configElement = $this->_fileConfig->getConfigElement($topicConfigData);
+
+        if ($configElement) {
+            $topicArn = $configElement->getAttribute('arn');
+            $isTopicActive = $configElement->getAttribute('is_active');
+        }
+
+        if ($isTopicActive || $isTopicActive === null) {
+            if (!$topicArn) {
+                $topicArn = $topic->getCollection()
+                    ->addFieldToSelect('arn')
+                    ->addFieldToFilter($topicAttribute, $topicAttributeValue)
+                    ->getItem();
+
+                $topicArn = isset($topicArn[0]) ? $topicArn[0]->getArn() : '';
+            }
+
+            if ($topicArn) {
+                $result = $topic->subscribe($topicArn);
+                $subscriptionArn = $result->get('SubscriptionArn');
+            }
+        }
 
         $result = $subscriptionArn
             ? "Topic has been subscribed to successfully! ({$subscriptionArn})"

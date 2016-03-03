@@ -27,13 +27,16 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param string $fileName
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
-    {
+    public function __construct(
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
+        $fileName = ''
+    ) {
         $etcDir = $moduleReader->getModuleDir(
             \Magento\Framework\Module\Dir::MODULE_ETC_DIR, 'ShopGo_AmazonSns'
         );
-        $this->_schema = $etcDir . '/config.xsd';
+        $this->_schema = $etcDir . '/' . $fileName;
     }
 
     /**
