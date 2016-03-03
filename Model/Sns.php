@@ -112,22 +112,29 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
+     * @var TopicFactory
+     */
+    protected $_topicFactory;
+
+    /**
      * @param MessageValidator $messageValidator
      * @param Config $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param TopicFactory $topic
      */
     public function __construct(
         MessageValidator $messageValidator,
         Config $config,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        TopicFactory $topicFactory
     ) {
         $this->_config = $config;
-        $this->_sns = SnsClient::factory($this->getConfig());
         $this->_messageValidator = $messageValidator;
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
+        $this->_topicFactory = $topicFactory;
     }
 
     /**
@@ -232,6 +239,20 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get SNS Client
+     *
+     * @return SnsClient
+     */
+    public function getSnsClient()
+    {
+        if (!$this->_sns) {
+            $this->_sns = SnsClient::factory($this->getConfig());
+        }
+
+        return $this->_sns;
+    }
+
+    /**
      * Verify SNS message signature
      *
      * @return boolean
@@ -258,15 +279,18 @@ class Sns extends \Magento\Framework\Model\AbstractModel
 
         switch ($data['Type']) {
             case self::MESSAGE_TYPE_SUBSCRIPTION_CONFIRMATION:
-                $this->confirmSubscription($data['Token']);
+                $this->_topicFactory->create()->confirmSubscription($data['Token']);
                 break;
             case self::MESSAGE_TYPE_NOTIFICATION:
-                $this->_eventManager->dispatch(
-                    self::SNS_EVENT_NOTIFICATION,
-                    [
-                        'notification' => json_decode($data['Message'], true)
-                    ]
-                );
+                $topic = $this->_topicFactory->create()->load($data['TopicArn']);
+                if ($topic && $topic->isActive()) {
+                    $this->_eventManager->dispatch(
+                        self::SNS_EVENT_NOTIFICATION,
+                        [
+                            'notification' => json_decode($data['Message'], true)
+                        ]
+                    );
+                }
                 break;
         }
     }
