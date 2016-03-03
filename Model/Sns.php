@@ -25,9 +25,21 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     const MESSAGE_TYPE_NOTIFICATION = 'Notification';
 
     /**
-     * SNS endpoint path
+     * SNS standard endpoint path
      */
-    const ENDPOINT_PATH = 'amazon/sns/endpoint';
+    const STANDARD_ENDPOINT_PATH = 'amazon/sns/endpoint';
+
+    /**
+     * SNS API endpoint path
+     *
+     * @TODO This is currently not supported,
+     * due to an issue that is described in the following link:
+     * https://forums.aws.amazon.com/thread.jspa?messageID=418160
+     * Once they fix it, this option will be used.
+     * You can read more about it here:
+     * http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html
+     */
+    const API_ENDPOINT_PATH = 'rest/default/V1/amazon/sns/endpoint';
 
     /**
      * SNS event "notificaiton"
@@ -216,7 +228,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     public function getEndpoint()
     {
         $baseUrl = $this->_storeManager->getStore()->getBaseUrl();
-        return $baseUrl . self::ENDPOINT_PATH;
+        return $baseUrl . self::STANDARD_ENDPOINT_PATH;
     }
 
     /**
