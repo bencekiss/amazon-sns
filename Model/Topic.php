@@ -72,7 +72,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
             $this->unsubscribe($subscriptionArn);
         }
 
-        $result = $this->_sns->deleteTopic([
+        $result = $this->_sns->getSnsClient()->deleteTopic([
             'TopicArn' => $arn
         ]);
 
@@ -104,7 +104,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      */
     public function unsubscribe($subscriptionArn)
     {
-        $result = $this->_sns->unsubscribe([
+        $result = $this->_sns->getSnsClient()->unsubscribe([
             'SubscriptionArn' => $subscriptionArn
         ]);
 
