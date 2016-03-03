@@ -21,15 +21,23 @@ class Config extends \Magento\Framework\Model\AbstractModel
     public $fileConfig;
 
     /**
+     * @var \Magento\Framework\App\Cache\TypeListInterface
+     */
+    protected $_cacheTypeList;
+
+    /**
      * @param Config\System $systemConfig
-     * @param Config\File $fileConfig
+     * @param \ShopGo\AmazonSns\Model\Config\File $fileConfig
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      */
     public function __construct(
         Config\System $systemConfig,
-        Config\File $fileConfig
+        \ShopGo\AmazonSns\Model\Config\File $fileConfig,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
     ) {
-        $this->systemConfig = $systemConfig;
-        $this->fileConfig   = $fileConfig;
+        $this->systemConfig   = $systemConfig;
+        $this->fileConfig     = $fileConfig;
+        $this->_cacheTypeList = $cacheTypeList;
     }
 
     /**
@@ -76,6 +84,7 @@ class Config extends \Magento\Framework\Model\AbstractModel
             ];
 
             $this->systemConfig->setConfigData($configData);
+            $this->_cacheTypeList->cleanType('config');
 
             $result = true;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
