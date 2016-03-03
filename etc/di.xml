@@ -14,4 +14,33 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="amazon_sns_topic_listing_data_source" xsi:type="string">ShopGo\AmazonSns\Model\ResourceModel\Topic\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="ShopGo\AmazonSns\Model\ResourceModel\Topic\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">amazon_sns_topic</argument>
+            <argument name="eventPrefix" xsi:type="string">amazon_sns_topic_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">topic_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">ShopGo\AmazonSns\Model\ResourceModel\Topic</argument>
+        </arguments>
+    </type>
+    <virtualType name="TopicGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="TopicGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">ShopGo\AmazonSns\Model\ResourceModel\Topic\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">TopicGridFilterPool</argument>
+        </arguments>
+    </virtualType>
 </config>
