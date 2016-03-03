@@ -18,9 +18,9 @@ use Magento\Framework\App\State;
 class CreateTopic extends Command
 {
     /**
-     * Topic argument
+     * Topic name argument
      */
-    const TOPIC_ARGUMENT = 'topic';
+    const TOPIC_NAME_ARGUMENT = 'topic_name';
 
     /**
      * @var State
@@ -28,20 +28,20 @@ class CreateTopic extends Command
     private $_state;
 
     /**
-     * @var \ShopGo\AmazonSns\Model\SnsFactory
+     * @var \ShopGo\AmazonSns\Model\TopicFactory
      */
-    private $_snsFactory;
+    private $_topicFactory;
 
     /**
      * @param State $state
-     * @param \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
+     * @param \ShopGo\AmazonSns\Model\TopicFactory $topicFactory
      */
     public function __construct(
         State $state,
-        \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
+        \ShopGo\AmazonSns\Model\SnsFactory $topicFactory
     ) {
         $this->_state = $state;
-        $this->_snsFactory = $snsFactory;
+        $this->_topicFactory = $topicFactory;
         parent::__construct();
     }
 
@@ -54,9 +54,9 @@ class CreateTopic extends Command
             ->setDescription('Create SNS topic command')
             ->setDefinition([
                 new InputArgument(
-                    self::TOPIC_ARGUMENT,
-                    InputArgument::OPTIONAL,
-                    'Topic'
+                    self::TOPIC_NAME_ARGUMENT,
+                    InputArgument::REQUIRED,
+                    'Topic name'
                 )
             ]);
 
@@ -70,8 +70,8 @@ class CreateTopic extends Command
     {
         $this->_state->setAreaCode('adminhtml');
 
-        $topic  = $input->getArgument(self::TOPIC_ARGUMENT);
-        $result = $this->_snsFactory->create()->createTopic($topic);
+        $topicName = $input->getArgument(self::TOPIC_NAME_ARGUMENT);
+        $result = $this->_topicFactory->create()->createTopic($topicName, true);
 
         $topicArn = $result->get('TopicArn');
 
