@@ -11,6 +11,13 @@ namespace ShopGo\AmazonSns\Model;
 class Topic extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Object manager
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
+    /**
      * @var Sns
      */
     protected $_sns;
@@ -23,9 +30,11 @@ class Topic extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         Sns $sns
     ) {
         parent::__construct($context, $registry);
+        $this->_objectManager = $objectManager;
         $this->_sns = $sns;
     }
 
@@ -35,6 +44,16 @@ class Topic extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init('ShopGo\AmazonSns\Model\ResourceModel\Topic');
+    }
+
+    /**
+     * Get topic model
+     *
+     * @return ShopGo\AmazonSns\Model\AmazonSns
+     */
+    private function _getModel()
+    {
+        return $this->_objectManager->create('ShopGo\AmazonSns\Model\Topic');
     }
 
     /**
@@ -126,6 +145,15 @@ class Topic extends \Magento\Framework\Model\AbstractModel
             'TopicArn' => $topicArn,
             'AuthenticateOnUnsubscribe' => $authenticateOnUnsubscribe
         ]);
+
+        try {
+            $topic = $this->_getModel()->load($topicArn);
+            $subscriptionArn = $result->get('SubscriptionArn');
+
+            if ($topic->getTopicId() && $subscriptionArn) {
+                $topic->setSubscriptionArn($subscriptionArn)->save();
+            }
+        } catch (\Exception $e) {}
 
         return $result;
     }
