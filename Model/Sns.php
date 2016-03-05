@@ -259,11 +259,11 @@ class Sns extends \Magento\Framework\Model\AbstractModel
 
         switch ($data['Type']) {
             case self::MESSAGE_TYPE_SUBSCRIPTION_CONFIRMATION:
-                $this->_topicFactory->create()->confirmSubscription($data['Token']);
+                $this->_topicFactory->create()->confirmSubscription($data['Token'], $data['TopicArn']);
                 break;
             case self::MESSAGE_TYPE_NOTIFICATION:
                 $topic = $this->_topicFactory->create()->load($data['TopicArn']);
-                if ($topic && $topic->isActive()) {
+                if ($topic && $topic->getIsActive()) {
                     $this->_eventManager->dispatch(
                         self::SNS_EVENT_NOTIFICATION,
                         [

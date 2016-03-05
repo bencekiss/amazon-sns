@@ -116,15 +116,15 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $token
      * @param string $topicArn
-     * @param bool $authenticateOnSubscribe
+     * @param bool $authenticateOnUnsubscribe
      * @return \Guzzle\Service\Resource\Model
      */
-    public function confirmSubscription($token, $topicArn, $authenticateOnSubscribe = true)
+    public function confirmSubscription($token, $topicArn, $authenticateOnUnsubscribe = 'true')
     {
         $result = $this->_sns->getSnsClient()->confirmSubscription([
-            'AuthenticateOnUnsubscribe' => $authenticateOnSubscribe,
             'Token'    => $token,
-            'TopicArn' => $topicArn
+            'TopicArn' => $topicArn,
+            'AuthenticateOnUnsubscribe' => $authenticateOnUnsubscribe
         ]);
 
         return $result;
