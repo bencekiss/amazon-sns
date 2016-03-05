@@ -25,7 +25,6 @@ class Enable extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
                 $model->load($id);
 
                 $model->setIsActive(1);
-
                 $model->save();
 
                 $this->messageManager->addSuccess(__("You enabled the SNS topic."));

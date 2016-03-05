@@ -25,7 +25,6 @@ class Disable extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
                 $model->load($id);
 
                 $model->setIsActive(0);
-
                 $model->save();
 
                 $this->messageManager->addSuccess(__("You disabled the SNS topic."));

@@ -9,26 +9,6 @@ namespace ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic;
 class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
 {
     /**
-     * SNS Topic model
-     *
-     * @var \ShopGo\AmazonSns\Model\Topic
-     */
-    protected $_snsTopic;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \ShopGo\AmazonSns\Model\Topic $snsTopic
-    ) {
-        parent::__construct($context, $coreRegistry);
-        $this->_snsTopic = $snsTopic;
-    }
-
-    /**
      * Save action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -38,11 +18,13 @@ class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $data  = $this->getRequest()->getPostValue();
-        $model = $this->_objectManager->create('ShopGo\AmazonSns\Model\Topic');
-        $topicId = ['topic_id' => $this->getRequest()->getParam('topic_id')];
 
         if ($data) {
+            $topicId = ['topic_id' => $this->getRequest()->getParam('topic_id')];
+
             try {
+                $model = $this->_objectManager->create('ShopGo\AmazonSns\Model\Topic');
+
                 if (empty($topicId['topic_id'])) {
                     $isTopic = $model->getCollection()
                         ->addFieldToFilter('name', $data['name'])
@@ -57,7 +39,7 @@ class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
                         return $resultRedirect->setPath('*/*/edit');
                     }
 
-                    $topic = $this->_snsTopic->createTopic($data['name'], true);
+                    $topic = $model->createTopic($data['name'], true);
                     $data['arn'] = $topic->get('TopicArn');
 
                     if (!$data['arn']) {
