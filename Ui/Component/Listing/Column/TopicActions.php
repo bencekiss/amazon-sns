@@ -18,8 +18,9 @@ class TopicActions extends Column
     /**
      * Url path
      */
-    const URL_PATH_EDIT   = 'amazon/sns_topic/edit';
-    const URL_PATH_DELETE = 'amazon/sns_topic/delete';
+    const URL_PATH_ENABLE  = 'amazon/sns_topic/enable';
+    const URL_PATH_DISABLE = 'amazon/sns_topic/disable';
+    const URL_PATH_DELETE  = 'amazon/sns_topic/delete';
 
     /**
      * @var UrlInterface
@@ -58,6 +59,32 @@ class TopicActions extends Column
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item['topic_id'])) {
                     $item[$this->getData('name')] = [
+                        'enable' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_ENABLE,
+                                [
+                                    'topic_id' => $item['topic_id']
+                                ]
+                            ),
+                            'label' => __('Enable'),
+                            'confirm' => [
+                                'title' => __('Enable "${ $.$data.name }"'),
+                                'message' => __('Are you sure you want to enable a "${ $.$data.name }" record?')
+                            ]
+                        ],
+                        'disable' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_DISABLE,
+                                [
+                                    'topic_id' => $item['topic_id']
+                                ]
+                            ),
+                            'label' => __('Disable'),
+                            'confirm' => [
+                                'title' => __('Disable "${ $.$data.name }"'),
+                                'message' => __('Are you sure you want to disable a "${ $.$data.name }" record?')
+                            ]
+                        ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_DELETE,
