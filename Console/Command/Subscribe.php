@@ -33,6 +33,11 @@ class Subscribe extends Command
     private $_state;
 
     /**
+     * @var \ShopGo\AmazonSns\Model\SnsFactory
+     */
+    private $_snsFactory;
+
+    /**
      * @var \ShopGo\AmazonSns\Model\TopicFactory
      */
     private $_topicFactory;
@@ -44,15 +49,18 @@ class Subscribe extends Command
 
     /**
      * @param State $state
+     * @param \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
      * @param \ShopGo\AmazonSns\Model\TopicFactory $topicFactory
      * @param \ShopGo\AmazonSns\Model\Config\File $fileConfig
      */
     public function __construct(
         State $state,
+        \ShopGo\AmazonSns\Model\SnsFactory $snsFactory,
         \ShopGo\AmazonSns\Model\TopicFactory $topicFactory,
         \ShopGo\AmazonSns\Model\Config\File $fileConfig
     ) {
         $this->_state = $state;
+        $this->_snsFactory = $snsFactory;
         $this->_topicFactory = $topicFactory;
         $this->_fileConfig = $fileConfig;
         parent::__construct();
@@ -119,8 +127,9 @@ class Subscribe extends Command
             }
 
             if ($topicArn) {
-                $result = $topic->subscribe($topicArn);
-                $subscriptionArn = $result->get('SubscriptionArn');
+                $sns = $this->_snsFactory->create();
+                $result = $sns->subscribe($topicArn);
+                $subscriptionArn = $sns->getSnsResult($result, 'SubscriptionArn');
             }
         }
 

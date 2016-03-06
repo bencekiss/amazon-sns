@@ -27,27 +27,27 @@ class MassDelete extends \Magento\Backend\App\Action
     protected $collectionFactory;
 
     /**
-     * SNS Topic model
+     * SNS model
      *
-     * @var \ShopGo\AmazonSns\Model\Topic
+     * @var \ShopGo\AmazonSns\Model\Sns
      */
-    protected $_snsTopic;
+    protected $_sns;
 
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @param \ShopGo\AmazonSns\Model\Topic $snsTopic
+     * @param \ShopGo\AmazonSns\Model\Sns $sns
      */
     public function __construct(
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        \ShopGo\AmazonSns\Model\Topic $snsTopic
+        \ShopGo\AmazonSns\Model\Sns $sns
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
-        $this->_snsTopic = $snsTopic;
+        $this->_sns = $sns;
         parent::__construct($context);
     }
 
@@ -63,8 +63,7 @@ class MassDelete extends \Magento\Backend\App\Action
         $collectionSize = $collection->getSize();
 
         foreach ($collection as $topic) {
-            $this->_snsTopic->deleteTopic($topic->getArn(), $topic->getSubscriptionArn());
-            $topic->delete();
+            $this->_sns->deleteTopic($topic->getArn(), $topic->getSubscriptionArn(), $topic);
         }
 
         $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collectionSize));

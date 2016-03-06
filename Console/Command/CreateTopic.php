@@ -28,20 +28,20 @@ class CreateTopic extends Command
     private $_state;
 
     /**
-     * @var \ShopGo\AmazonSns\Model\TopicFactory
+     * @var \ShopGo\AmazonSns\Model\SnsFactory
      */
-    private $_topicFactory;
+    private $_snsFactory;
 
     /**
      * @param State $state
-     * @param \ShopGo\AmazonSns\Model\TopicFactory $topicFactory
+     * @param \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
      */
     public function __construct(
         State $state,
-        \ShopGo\AmazonSns\Model\SnsFactory $topicFactory
+        \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
     ) {
         $this->_state = $state;
-        $this->_topicFactory = $topicFactory;
+        $this->_snsFactory = $snsFactory;
         parent::__construct();
     }
 
@@ -71,12 +71,13 @@ class CreateTopic extends Command
         $this->_state->setAreaCode('adminhtml');
 
         $topicName = $input->getArgument(self::TOPIC_NAME_ARGUMENT);
-        $result = $this->_topicFactory->create()->createTopic($topicName, true);
+        $sns = $this->_snsFactory->create();
 
-        $topicArn = $result->get('TopicArn');
+        $result = $sns->createTopic($topicName, true, 1);
+        $topicArn = $sns->getSnsResult($result, 'TopicArn');
 
         $result = $topicArn
-            ? "Topic ({$topicArn}) has been successfully created! (Or, is already created!)"
+            ? "Topic ({$topicArn}) has been successfully created!"
             : "Could not create topic!";
 
         $output->writeln('<info>' . $result . '</info>');

@@ -9,6 +9,27 @@ namespace ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic;
 class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
 {
     /**
+     * SNS model
+     *
+     * @var \ShopGo\AmazonSns\Model\Sns
+     */
+    protected $_sns;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \ShopGo\AmazonSns\Model\Sns $sns
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \ShopGo\AmazonSns\Model\Sns $sns
+    ) {
+        $this->_sns = $sns;
+        parent::__construct($context, $coreRegistry);
+    }
+
+    /**
      * Save action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -17,7 +38,7 @@ class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $data  = $this->getRequest()->getPostValue();
+        $data = $this->getRequest()->getPostValue();
 
         if ($data) {
             $topicId = ['topic_id' => $this->getRequest()->getParam('topic_id')];
@@ -39,19 +60,16 @@ class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
                         return $resultRedirect->setPath('*/*/edit');
                     }
 
-                    $topic = $model->createTopic($data['name'], true);
-                    $data['arn'] = $topic->get('TopicArn');
+                    $topic = $this->_sns->createTopic($data['name'], true, $model);
+                    $topicArn = $this->_sns->getSnsResult($topic, 'TopicArn');
 
-                    if (!$data['arn']) {
+                    if (!$topicArn) {
                         $this->messageManager->addError(__('Could not save the SNS topic.'));
                         $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
 
                         return $resultRedirect->setPath('*/*/edit');
                     }
                 }
-
-                $model->setData($data);
-                $model->save();
 
                 $this->messageManager->addSuccess(__('You saved the SNS topic.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
