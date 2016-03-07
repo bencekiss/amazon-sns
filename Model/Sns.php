@@ -377,13 +377,16 @@ class Sns extends \Magento\Framework\Model\AbstractModel
 
         if ($topicModel) {
             try {
-                if (gettype($topicModel) == 'object' && $topicModel->getTopicId()) {
-                    //Do nothing.
+                if ($topicModel) {
+                    if (gettype($topicModel) == 'object' && $topicModel->getTopicId()) {
+                        $topic = $topicModel;
+                    } else {
+                        $topic = $this->loadTopicModel($topicModel);
+                    }
                 } else {
-                    $topicModel = $arn;
+                    $topic = $this->loadTopicModel($arn);
                 }
 
-                $topic = $this->loadTopicModel($topicModel);
                 $topic->delete();
             } catch (\Exception $e) {}
         }
