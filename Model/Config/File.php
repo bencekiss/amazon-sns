@@ -160,7 +160,7 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
 
         if (!$config) {
             $config = $this->_varDirectory->readFile(
-                self::CONFIG_DIRECTORY_PATH . $this->_fileName
+                self::VAR_CONFIG_DIRECTORY_PATH . $this->_fileName
             );
         }
 
@@ -188,7 +188,7 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
     /**
      * Check whether config file exists
      *
-     * @return boolean
+     * @return bool
      */
     protected function _configFileExists()
     {
@@ -206,7 +206,7 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
     /**
      * Validate DOM
      *
-     * @return boolean
+     * @return bool
      */
     protected function _validateDom()
     {
@@ -265,7 +265,7 @@ class File extends \Magento\Framework\Config\Reader\Filesystem
      * Get config element
      *
      * @param array|string $element
-     * @return DOMElement|null
+     * @return \DOMElement|null
      */
     public function getConfigElement($element)
     {

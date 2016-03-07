@@ -57,7 +57,7 @@ class Config extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $path
      * @param string $value
-     * @return boolean
+     * @return bool
      */
     public function setConfigData($path, $value)
     {
