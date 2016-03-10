@@ -9,8 +9,10 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="ShopGo_AmazonSns::amazon_sns">
-                    <resource id="ShopGo_AmazonSns::topics" title="Topics" sortOrder="0"/>
+                <resource id="ShopGo_Core::shopgo">
+                    <resource id="ShopGo_AmazonSns::amazon_sns" title="Amazon SNS" sortOrder="0">
+                        <resource id="ShopGo_AmazonSns::topics" title="Topics" sortOrder="0"/>
+                    </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
