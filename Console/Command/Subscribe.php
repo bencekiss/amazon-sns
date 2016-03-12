@@ -116,7 +116,7 @@ class Subscribe extends Command
             $isTopicActive = $configElement->getAttribute('is_active');
         }
 
-        if ($isTopicActive || $isTopicActive === null) {
+        if ($isTopicActive || $isTopicActive == '') {
             if (!$topicArn) {
                 $topicArn = $topic->getCollection()
                     ->addFieldToSelect('arn')
@@ -134,8 +134,8 @@ class Subscribe extends Command
         }
 
         $result = $subscriptionArn
-            ? "Topic has been subscribed to successfully! ({$subscriptionArn})"
-            : "Could not subscribe to topic!";
+            ? 'Topic has been subscribed to successfully!'
+            : 'Could not subscribe to topic!';
 
         $output->writeln('<info>' . $result . '</info>');
     }
