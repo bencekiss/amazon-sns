@@ -40,6 +40,7 @@ abstract class Topic extends \Magento\Backend\App\Action
         $resultPage->setActiveMenu('ShopGo_AmazonSns::amazon_sns_topics')
             ->addBreadcrumb(__('Amazon SNS'), __('Amazon SNS'))
             ->addBreadcrumb(__('Topics'), __('Topics'));
+
         return $resultPage;
     }
 

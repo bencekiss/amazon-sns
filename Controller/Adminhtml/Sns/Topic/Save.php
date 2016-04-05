@@ -60,7 +60,7 @@ class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
                         return $resultRedirect->setPath('*/*/edit');
                     }
 
-                    $topic = $this->_sns->createTopic($data['name'], true, $model);
+                    $topic = $this->_sns->createTopic($data['name'], $data['subscribe'], $model);
                     $topicArn = $this->_sns->getSnsResult($topic, 'TopicArn');
 
                     if (!$topicArn) {

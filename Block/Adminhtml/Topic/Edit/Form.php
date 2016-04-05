@@ -87,6 +87,23 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
+        $fieldset->addField(
+            'subscribe',
+            'select',
+            [
+                'label' => __('Subscribe'),
+                'title' => __('Subscribe'),
+                'name' => 'subscribe',
+                'required' => false,
+                'options' => ['1' => __('Yes'), '0' => __('No')]
+            ]
+        );
+        if (!$this->getData('subscribe')) {
+            $model->setData('subscribe', '1');
+        }
+
+        // Edit mode is disabled, so the code inside the if statement
+        // will never get executed.
         if ($this->_coreRegistry->registry('amazon_sns_topic')->getId()) {
             $fieldset->addField(
                 'arn',
