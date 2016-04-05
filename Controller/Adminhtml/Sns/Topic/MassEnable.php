@@ -30,7 +30,6 @@ class MassEnable extends \Magento\Backend\App\Action
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @param \ShopGo\AmazonSns\Model\Topic $snsTopic
      */
     public function __construct(
         Context $context,
