@@ -135,6 +135,32 @@
                     </item>
                 </argument>
             </action>
+            <action name="subscribe">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">subscribe</item>
+                        <item name="label" xsi:type="string" translate="true">Subscribe</item>
+                        <item name="url" xsi:type="url" path="amazon/sns_topic/massSubscribe"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Subscribe to topics</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to subscribe to the selected topics?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="unsubscribe">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">unsubscribe</item>
+                        <item name="label" xsi:type="string" translate="true">Unsubscribe</item>
+                        <item name="url" xsi:type="url" path="amazon/sns_topic/massUnsubscribe"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Unsubscribe from topics</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to unsubscribe from the selected topics?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
             <action name="delete">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
