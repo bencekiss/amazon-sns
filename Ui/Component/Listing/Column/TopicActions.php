@@ -18,9 +18,12 @@ class TopicActions extends Column
     /**
      * Url path
      */
-    const URL_PATH_ENABLE  = 'amazon/sns_topic/enable';
-    const URL_PATH_DISABLE = 'amazon/sns_topic/disable';
-    const URL_PATH_DELETE  = 'amazon/sns_topic/delete';
+    const URL_PATH_ENABLE      = 'amazon/sns_topic/enable';
+    const URL_PATH_DISABLE     = 'amazon/sns_topic/disable';
+    const URL_PATH_SUBSCRIBE   = 'amazon/sns_topic/subscribe';
+    const URL_PATH_UNSUBSCRIBE = 'amazon/sns_topic/unsubscribe';
+    const URL_PATH_PUBLISH     = 'amazon/sns_topic/publish';
+    const URL_PATH_DELETE      = 'amazon/sns_topic/delete';
 
     /**
      * @var UrlInterface
@@ -84,6 +87,41 @@ class TopicActions extends Column
                                 'title' => __('Disable "${ $.$data.name }"'),
                                 'message' => __('Are you sure you want to disable a "${ $.$data.name }" record?')
                             ]
+                        ],
+                        'subsribe' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_SUBSCRIBE,
+                                [
+                                    'topic_id' => $item['topic_id']
+                                ]
+                            ),
+                            'label' => __('Subscribe'),
+                            'confirm' => [
+                                'title' => __('Subscribe to Topic "${ $.$data.name }"'),
+                                'message' => __('Are you sure you want to subscribe to topic "${ $.$data.name }"?')
+                            ]
+                        ],
+                        'unsubsribe' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_UNSUBSCRIBE,
+                                [
+                                    'topic_id' => $item['topic_id']
+                                ]
+                            ),
+                            'label' => __('Unsubscribe'),
+                            'confirm' => [
+                                'title' => __('Unsubscribe fromS Topic "${ $.$data.name }"'),
+                                'message' => __('Are you sure you want to unsubscribe from topic "${ $.$data.name }"?')
+                            ]
+                        ],
+                        'publish' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_PUBLISH,
+                                [
+                                    'topic_id' => $item['topic_id']
+                                ]
+                            ),
+                            'label' => __('Publish')
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
