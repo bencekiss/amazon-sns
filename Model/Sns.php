@@ -329,7 +329,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * Create SNS topic
      *
      * @param string $name
-     * @param bool $subscribe
+     * @param bool|int $subscribe
      * @param int|string|TopicModel $topicModel
      * @return \Guzzle\Service\Resource\Model
      */
@@ -459,6 +459,44 @@ class Sns extends \Magento\Framework\Model\AbstractModel
                 $topic->setSubscriptionArn($subscriptionArn)->save();
             }
         } catch (\Exception $e) {}
+
+        return $result;
+    }
+
+    /**
+     * Publish notifications to topic
+     *
+     * @param string $message
+     * @param string $topicArn
+     * @param string $subject
+     * @param string $targetArn
+     * @param string $messageStructure
+     * @param array $messageAttributes
+     * @return \Guzzle\Service\Resource\Model
+     */
+    public function publish($message, $topicArn = '', $subject = '', $targetArn = '', $messageStructure = '', $messageAttributes = [])
+    {
+        $data = [
+            'Message' => $message
+        ];
+
+        if ($topicArn) {
+            $data['TopicArn'] = $topicArn;
+        }
+        if ($subject) {
+            $data['Subject'] = $subject;
+        }
+        if ($targetArn) {
+            $data['TargetArn'] = $targetArn;
+        }
+        if ($messageStructure) {
+            $data['MessageStructure'] = $messageStructure;
+        }
+        if ($messageAttributes) {
+            $data['MessageAttributes'] = $messageAttributes;
+        }
+
+        $result = $this->getSnsClient()->publish($data);
 
         return $result;
     }
