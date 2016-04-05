@@ -39,11 +39,21 @@
             <argument name="fileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
         </arguments>
     </type>
+    <type name="ShopGo\AmazonSns\Console\Command\Unsubscribe">
+        <arguments>
+            <argument name="fileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="createTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\CreateTopic</item>
-                <item name="subscribe" xsi:type="object">ShopGo\AmazonSns\Console\Command\Subscribe</item>
+                <item name="createTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Create</item>
+                <item name="deleteTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Delete</item>
+                <item name="enableTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Enable</item>
+                <item name="disableTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Disable</item>
+                <item name="subscribeTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Subscribe</item>
+                <item name="unsubscribeTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Unsubscribe</item>
+                <item name="publishToTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Publish</item>
             </argument>
         </arguments>
     </type>
