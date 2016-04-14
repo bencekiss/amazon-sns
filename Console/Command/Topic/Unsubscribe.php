@@ -135,7 +135,7 @@ class Unsubscribe extends Command
         }
 
         $result = $subscriptionArn
-            ? 'Topic has been unsubscribed from successfully!'
+            ? 'Topic has been unsubscribed successfully!'
             : 'Could not unsubscribe from topic!';
 
         $output->writeln('<info>' . $result . '</info>');

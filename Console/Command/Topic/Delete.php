@@ -101,8 +101,8 @@ class Delete extends Command
         $result = $sns->deleteTopic($topic->getArn(), $topic->getSubscriptionArn(), $topic);
 
         $result = $result
-            ? "Topic has been deleted successfully!"
-            : "Could not delete topic!";
+            ? 'Topic has been deleted successfully!'
+            : 'Could not delete topic!';
 
         $output->writeln('<info>' . $result . '</info>');
     }
