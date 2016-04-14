@@ -48,6 +48,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="createTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Create</item>
+                <item name="addTopicArn" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\AddArn</item>
                 <item name="deleteTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Delete</item>
                 <item name="enableTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Enable</item>
                 <item name="disableTopic" xsi:type="object">ShopGo\AmazonSns\Console\Command\Topic\Disable</item>
