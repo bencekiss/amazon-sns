@@ -28,6 +28,16 @@ class Subscribe extends Command
     const TOPIC_ATTRIBUTE_VALUE_ARGUMENT = 'topic_attribute_value';
 
     /**
+     * Endpoint protocol argument
+     */
+    const PROTOCOL_ARGUMENT = 'protocol';
+
+    /**
+     * Endpoint argument
+     */
+    const ENDPOINT_ARGUMENT = 'endpoint';
+
+    /**
      * @var State
      */
     private $_state;
@@ -83,6 +93,16 @@ class Subscribe extends Command
                     self::TOPIC_ATTRIBUTE_VALUE_ARGUMENT,
                     InputArgument::REQUIRED,
                     'Topic attribute value'
+                ),
+                new InputArgument(
+                    self::PROTOCOL_ARGUMENT,
+                    InputArgument::OPTIONAL,
+                    'Endpoint protocol'
+                ),
+                new InputArgument(
+                    self::ENDPOINT_ARGUMENT,
+                    InputArgument::OPTIONAL,
+                    'Endpoint'
                 )
             ]);
 
@@ -98,6 +118,8 @@ class Subscribe extends Command
 
         $topicAttribute = $input->getArgument(self::TOPIC_ATTRIBUTE_ARGUMENT);
         $topicAttributeValue = $input->getArgument(self::TOPIC_ATTRIBUTE_VALUE_ARGUMENT);
+        $protocol = $input->getArgument(self::PROTOCOL_ARGUMENT);
+        $endpoint = $input->getArgument(self::ENDPOINT_ARGUMENT);
 
         $subscriptionArn = '';
         $topic = $this->_topicFactory->create();
@@ -128,14 +150,14 @@ class Subscribe extends Command
 
                 if ($topicArn) {
                     $sns = $this->_snsFactory->create();
-                    $result = $sns->subscribe($topicArn);
+                    $result = $sns->subscribe($topicArn, $protocol, $endpoint);
                     $subscriptionArn = $sns->getSnsResult($result, 'SubscriptionArn');
                 }
             }
         }
 
         $result = $subscriptionArn
-            ? 'Topic has been subscribed to successfully!'
+            ? 'Topic has been subscribed successfully!'
             : 'Could not subscribe to topic!';
 
         $output->writeln('<info>' . $result . '</info>');
