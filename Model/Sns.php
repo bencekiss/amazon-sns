@@ -398,15 +398,33 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * Subscribe to SNS topic
      *
      * @param string $topicArn
+     * @param string $protocol
+     * @param string $endpoint
      * @return \Guzzle\Service\Resource\Model
      */
-    public function subscribe($topicArn)
+    public function subscribe($topicArn, $protocol = '', $endpoint = '')
     {
+        if (!$protocol) {
+            $protocol = $this->getProtocol();
+        }
+        if (!$endpoint) {
+            $endpoint = $this->getEndpoint();
+        }
+
         $result = $this->getSnsClient()->subscribe([
             'TopicArn' => $topicArn,
-            'Protocol' => $this->getProtocol(),
-            'Endpoint' => $this->getEndpoint()
+            'Protocol' => $protocol,
+            'Endpoint' => $endpoint
         ]);
+
+        if ($endpoint != $this->getEndpoint()) {
+            Try {
+                $topic = $this->loadTopicModel($topicArn);
+                $topic->setEndpointType(
+                    \ShopGo\AmazonSns\Model\Topic::ENDPOINT_TYPE_EXTERNAL
+                )->save();
+            } catch (\Exception $e) {}
+        }
 
         return $result;
     }
