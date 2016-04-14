@@ -56,6 +56,12 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => true],
             'Subscription ARN'
         )->addColumn(
+            'endpoint_type',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['nullable' => true, 'default' => '1'],
+            'Endpoint Type'
+        )->addColumn(
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,

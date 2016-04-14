@@ -11,6 +11,12 @@ namespace ShopGo\AmazonSns\Model;
 class Topic extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Topic subscription endpoint types
+     */
+    const ENDPOINT_TYPE_INTERNAL = 1;
+    const ENDPOINT_TYPE_EXTERNAL = 2;
+
+    /**
      * @return void
      */
     protected function _construct()
