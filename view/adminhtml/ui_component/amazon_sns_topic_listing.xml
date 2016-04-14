@@ -248,24 +248,27 @@
                 </item>
             </argument>
         </column>
+        <column name="endpoint_type">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">ShopGo\AmazonSns\Ui\Component\Listing\Column\EndpointType\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Endpoint Type</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+        </column>
         <column name="is_active">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="array">
-                    <item name="disable" xsi:type="array">
-                        <item name="value" xsi:type="string">0</item>
-                        <item name="label" xsi:type="string" translate="true">Disabled</item>
-                    </item>
-                    <item name="enable" xsi:type="array">
-                        <item name="value" xsi:type="string">1</item>
-                        <item name="label" xsi:type="string" translate="true">Enabled</item>
-                    </item>
-                </item>
+                <item name="options" xsi:type="object">ShopGo\AmazonSns\Ui\Component\Listing\Column\IsActive\Options</item>
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
                 </item>
             </argument>
         </column>
@@ -273,7 +276,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">topic_id</item>
-                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
                 </item>
             </argument>
         </actionsColumn>
