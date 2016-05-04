@@ -88,7 +88,7 @@ class TopicActions extends Column
                                 'message' => __('Are you sure you want to disable a "${ $.$data.name }" record?')
                             ]
                         ],
-                        'subsribe' => [
+                        'subscribe' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_SUBSCRIBE,
                                 [
@@ -101,7 +101,7 @@ class TopicActions extends Column
                                 'message' => __('Are you sure you want to subscribe to topic "${ $.$data.name }"?')
                             ]
                         ],
-                        'unsubsribe' => [
+                        'unsubscribe' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_UNSUBSCRIBE,
                                 [
