@@ -7,6 +7,53 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="ShopGo\AmazonSns\Api\EndpointInterface" type="ShopGo\AmazonSns\Model\Endpoint"/>
+    <virtualType name="ShopGo\AmazonSns\Model\Logger\Handler\Base" type="ShopGo\Aws\Model\Logger\Handler\Base">
+        <arguments>
+            <argument name="logModulePath" xsi:type="string">aws/sns/</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Logger\Handler\System" type="ShopGo\AmazonSns\Model\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">system.log</argument>
+            <argument name="loggerType" xsi:type="string">info</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Logger\Handler\Debug" type="ShopGo\AmazonSns\Model\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">debug.log</argument>
+            <argument name="loggerType" xsi:type="string">debug</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Logger\Handler\Exception" type="ShopGo\AmazonSns\Model\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">exception.log</argument>
+            <argument name="loggerType" xsi:type="string">info</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Logger\Monolog" type="ShopGo\Aws\Model\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">ShopGo\AmazonSns\Model\Logger\Handler\System</item>
+                <item name="debug" xsi:type="object">ShopGo\AmazonSns\Model\Logger\Handler\Debug</item>
+                <item name="exception" xsi:type="object">ShopGo\AmazonSns\Model\Logger\Handler\Exception</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Logger" type="ShopGo\Aws\Model\Logger">
+        <arguments>
+            <argument name="logger" xsi:type="object">ShopGo\AmazonSns\Model\Logger\Monolog</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Helper\Utility" type="ShopGo\Aws\Helper\Utility">
+        <arguments>
+            <argument name="logger" xsi:type="object">ShopGo\AmazonSns\Model\Logger</argument>
+        </arguments>
+    </virtualType>
+    <type name="ShopGo\AmazonSns\Helper\Data">
+        <arguments>
+            <argument name="utility" xsi:type="object">ShopGo\AmazonSns\Helper\Utility</argument>
+        </arguments>
+    </type>
     <virtualType name="ShopGo\AmazonSns\Model\Config\File" type="ShopGo\AdvancedConfig\Model\Config\File">
         <arguments>
             <argument name="vendorConfigPath" xsi:type="string">vendor/shopgo/amazon-sns-config/</argument>

@@ -9,6 +9,7 @@
     <module name="ShopGo_AmazonSns" setup_version="1.0.0">
         <sequence>
             <module name="ShopGo_AdvancedConfig"/>
+            <module name="ShopGo_AdvancedLogger"/>
             <module name="ShopGo_Aws"/>
         </sequence>
     </module>

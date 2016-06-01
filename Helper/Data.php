@@ -7,5 +7,8 @@ namespace ShopGo\AmazonSns\Helper;
 
 class Data extends \ShopGo\Aws\Helper\AbstractHelper
 {
-    // Empty class
+    /**
+     * Log module directory path
+     */
+    const LOG_MODULE_PATH = 'aws/sns/';
 }
