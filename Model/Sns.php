@@ -114,7 +114,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param Config $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param TopicFactory $topic
+     * @param TopicFactory $topicFactory
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
