@@ -86,7 +86,7 @@ class Create extends Command
         $sns = $this->_snsFactory->create();
 
         $result   = $sns->createTopic($topicName, $subscribe, 1);
-        $topicArn = $sns->getSnsResult($result, 'TopicArn');
+        $topicArn = $sns->getHelper()->getClientResult($result, 'TopicArn');
 
         $result = $topicArn
             ? 'Topic has been created successfully!'

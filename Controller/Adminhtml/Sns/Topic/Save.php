@@ -61,7 +61,7 @@ class Save extends \ShopGo\AmazonSns\Controller\Adminhtml\Sns\Topic
                     }
 
                     $topic = $this->_sns->createTopic($data['name'], $data['subscribe'], $model);
-                    $topicArn = $this->_sns->getSnsResult($topic, 'TopicArn');
+                    $topicArn = $this->_sns->getHelper()->getClientResult($topic, 'TopicArn');
 
                     if (!$topicArn) {
                         $this->messageManager->addError(__('Could not save the SNS topic.'));

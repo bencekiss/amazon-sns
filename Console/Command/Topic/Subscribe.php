@@ -151,7 +151,7 @@ class Subscribe extends Command
                 if ($topicArn) {
                     $sns = $this->_snsFactory->create();
                     $result = $sns->subscribe($topicArn, $protocol, $endpoint);
-                    $subscriptionArn = $sns->getSnsResult($result, 'SubscriptionArn');
+                    $subscriptionArn = $sns->getHelper()->getClientResult($result, 'SubscriptionArn');
                 }
             }
         }

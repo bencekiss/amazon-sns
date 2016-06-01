@@ -48,39 +48,14 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     const SNS_EVENT_NOTIFICATION = 'sns_notification';
 
     /**
-     * Default version
-     */
-    const VERSION = 'latest';
-
-    /**
-     * XML path general version
-     */
-    const XML_PATH_GENERAL_VERSION = 'amazon_sns/general/version';
-
-    /**
-     * XML path general region
-     */
-    const XML_PATH_GENERAL_REGION = 'amazon_sns/general/region';
-
-    /**
      * XML path general protocol
      */
     const XML_PATH_GENERAL_PROTOCOL = 'amazon_sns/general/protocol';
 
     /**
-     * XML path credentials AWS key
-     */
-    const XML_PATH_CREDENTIALS_AWS_KEY = 'amazon_sns/credentials/aws_key';
-
-    /**
-     * XML path credentials AWS secret
-     */
-    const XML_PATH_CREDENTIALS_AWS_SECRET = 'amazon_sns/credentials/aws_secret';
-
-    /**
      * @var SnsClient
      */
-    protected $_snsClient;
+    protected $_client;
 
     /**
      * @var MessageValidator
@@ -108,6 +83,11 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_topicFactory;
 
     /**
+     * @var \ShopGo\AmazonSns\Helper\Data
+     */
+    protected $_helper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MessageValidator $messageValidator
@@ -115,6 +95,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TopicFactory $topicFactory
+     * @param \ShopGo\AmazonSns\Helper\Data $helper
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -123,7 +104,8 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         Config $config,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        TopicFactory $topicFactory
+        TopicFactory $topicFactory,
+        \ShopGo\AmazonSns\Helper\Data $helper
     ) {
         parent::__construct($context, $registry);
         $this->_config = $config;
@@ -131,27 +113,17 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
         $this->_topicFactory = $topicFactory;
+        $this->_helper = $helper;
     }
 
     /**
-     * Get version
+     * Get helper
      *
-     * @return string
+     * @return \ShopGo\AmazonSns\Helper\Data
      */
-    public function getVersion()
+    public function getHelper()
     {
-        $version = $this->_config->getConfigData(self::XML_PATH_GENERAL_VERSION);
-        return !$version ? self::VERSION : $version;
-    }
-
-    /**
-     * Get region
-     *
-     * @return string
-     */
-    public function getRegion()
-    {
-        return $this->_config->getConfigData(self::XML_PATH_GENERAL_REGION);
+        return $this->_helper;
     }
 
     /**
@@ -162,45 +134,6 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     public function getProtocol()
     {
         return $this->_config->getConfigData(self::XML_PATH_GENERAL_PROTOCOL);
-    }
-
-    /**
-     * Get AWS key
-     *
-     * @return string
-     */
-    public function getAwsKey()
-    {
-        return $this->_config->getConfigData(self::XML_PATH_CREDENTIALS_AWS_KEY);
-    }
-
-    /**
-     * Get AWS secret
-     *
-     * @return string
-     */
-    public function getAwsSecret()
-    {
-        return $this->_config->getConfigData(self::XML_PATH_CREDENTIALS_AWS_SECRET);
-    }
-
-    /**
-     * Get SNS client config
-     *
-     * @return array
-     */
-    public function getConfig()
-    {
-        $config = [
-            'version' => $this->getVersion(),
-            'region'  => $this->getRegion(),
-            'credentials' => [
-                'key'     => $this->getAwsKey(),
-                'secret'  => $this->getAwsSecret()
-            ]
-        ];
-
-        return $config;
     }
 
     /**
@@ -219,38 +152,13 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      *
      * @return SnsClient
      */
-    public function getSnsClient()
+    public function getClient()
     {
-        if (!$this->_snsClient) {
-            $this->_snsClient = SnsClient::factory($this->getConfig());
+        if (!$this->_client) {
+            $this->_client = SnsClient::factory($this->_helper->getClientConfig());
         }
 
-        return $this->_snsClient;
-    }
-
-    /**
-     * Check whether an object is Guzzle service resource model
-     *
-     * @param mixed $object
-     * @return bool
-     */
-    public function isGuzzleResourceModel($object)
-    {
-        return gettype($object) == 'object'
-            && $object instanceof \Guzzle\Service\Resource\Model;
-    }
-
-    /**
-     * Get SNS client result
-     *
-     * @param mixed $result
-     * @param string $param
-     * @return string
-     */
-    public function getSnsResult($result, $param)
-    {
-        return $this->isGuzzleResourceModel($result)
-            ? $result->get($param) : '';
+        return $this->_client;
     }
 
     /**
@@ -335,7 +243,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function createTopic($name, $subscribe = false, $topicModel = 0)
     {
-        $result = $this->getSnsClient()->createTopic([
+        $result = $this->getClient()->createTopic([
             'Name' => $name
         ]);
 
@@ -371,7 +279,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
             $this->unsubscribe($subscriptionArn);
         }
 
-        $result = $this->getSnsClient()->deleteTopic([
+        $result = $this->getClient()->deleteTopic([
             'TopicArn' => $arn
         ]);
 
@@ -411,7 +319,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
             $endpoint = $this->getEndpoint();
         }
 
-        $result = $this->getSnsClient()->subscribe([
+        $result = $this->getClient()->subscribe([
             'TopicArn' => $topicArn,
             'Protocol' => $protocol,
             'Endpoint' => $endpoint
@@ -438,7 +346,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function unsubscribe($subscriptionArn, $topicModel = 0)
     {
-        $result = $this->getSnsClient()->unsubscribe([
+        $result = $this->getClient()->unsubscribe([
             'SubscriptionArn' => $subscriptionArn
         ]);
 
@@ -463,7 +371,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function confirmSubscription($token, $topicArn, $authenticateOnUnsubscribe = 'true')
     {
-        $result = $this->getSnsClient()->confirmSubscription([
+        $result = $this->getClient()->confirmSubscription([
             'Token'    => $token,
             'TopicArn' => $topicArn,
             'AuthenticateOnUnsubscribe' => $authenticateOnUnsubscribe
@@ -514,7 +422,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
             $data['MessageAttributes'] = $messageAttributes;
         }
 
-        $result = $this->getSnsClient()->publish($data);
+        $result = $this->getClient()->publish($data);
 
         return $result;
     }

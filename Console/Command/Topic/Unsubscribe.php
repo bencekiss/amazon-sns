@@ -129,7 +129,7 @@ class Unsubscribe extends Command
                 if ($topicArn) {
                     $sns = $this->_snsFactory->create();
                     $result = $sns->unsubscribe($topicArn, 1);
-                    $subscriptionArn = $sns->getSnsResult($result, 'SubscriptionArn');
+                    $subscriptionArn = $sns->getHelper()->getClientResult($result, 'SubscriptionArn');
                 }
             }
         }

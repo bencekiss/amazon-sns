@@ -9,7 +9,6 @@
     <default>
         <amazon_sns>
             <general>
-                <version>latest</version>
                 <protocol>http</protocol>
             </general>
         </amazon_sns>
