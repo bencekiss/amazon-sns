@@ -63,11 +63,6 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_messageValidator;
 
     /**
-     * @var Config
-     */
-    protected $_config;
-
-    /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
@@ -91,7 +86,6 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MessageValidator $messageValidator
-     * @param Config $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TopicFactory $topicFactory
@@ -101,14 +95,12 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MessageValidator $messageValidator,
-        Config $config,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         TopicFactory $topicFactory,
         \ShopGo\AmazonSns\Helper\Data $helper
     ) {
         parent::__construct($context, $registry);
-        $this->_config = $config;
         $this->_messageValidator = $messageValidator;
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
@@ -133,7 +125,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function getProtocol()
     {
-        return $this->_config->getConfigData(self::XML_PATH_GENERAL_PROTOCOL);
+        return $this->_helper->getConfig()->getValue(self::XML_PATH_GENERAL_PROTOCOL);
     }
 
     /**

@@ -75,24 +75,24 @@ class Publish extends Command
     /**
      * @var \Magento\Framework\Config\ReaderInterface
      */
-    private $_fileConfig;
+    private $_topicFileConfig;
 
     /**
      * @param State $state
      * @param \ShopGo\AmazonSns\Model\SnsFactory $snsFactory
      * @param \ShopGo\AmazonSns\Model\TopicFactory $topicFactory
-     * @param \ShopGo\AmazonSns\Model\Config\File $fileConfig
+     * @param \Magento\Framework\Config\ReaderInterface $topicFileConfig
      */
     public function __construct(
         State $state,
         \ShopGo\AmazonSns\Model\SnsFactory $snsFactory,
         \ShopGo\AmazonSns\Model\TopicFactory $topicFactory,
-        \ShopGo\AmazonSns\Model\Config\File $fileConfig
+        \Magento\Framework\Config\ReaderInterface $topicFileConfig
     ) {
         $this->_state = $state;
         $this->_snsFactory = $snsFactory;
         $this->_topicFactory = $topicFactory;
-        $this->_fileConfig = $fileConfig;
+        $this->_topicFileConfig = $topicFileConfig;
         parent::__construct();
     }
 
@@ -181,7 +181,7 @@ class Publish extends Command
                 'item' => ['attributes' => [$topicAttribute => $topicAttributeValue]]
             ];
 
-            $configElement = $this->_fileConfig->getConfigElement($topicConfigData);
+            $configElement = $this->_topicFileConfig->getConfigElement($topicConfigData)->item(0);
 
             if ($configElement) {
                 $topicArn = $configElement->getAttribute('arn');
