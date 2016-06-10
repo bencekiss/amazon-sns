@@ -18,6 +18,14 @@
                     <label>Protocol</label>
                     <source_model>ShopGo\AmazonSns\Model\System\Config\Source\Protocol</source_model>
                 </field>
+                <field id="partition" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Partition</label>
+                    <source_model>ShopGo\Aws\Model\System\Config\Source\Partition</source_model>
+                </field>
+                <field id="region" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Region</label>
+                    <source_model>ShopGo\AmazonSns\Model\System\Config\Source\Region</source_model>
+                </field>
             </group>
         </section>
     </system>

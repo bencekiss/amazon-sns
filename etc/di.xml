@@ -7,6 +7,24 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="ShopGo\AmazonSns\Api\EndpointInterface" type="ShopGo\AmazonSns\Model\Endpoint"/>
+    <virtualType name="ShopGo\AmazonSns\Model\Config\SchemaLocator" type="ShopGo\AdvancedConfig\Model\Config\SchemaLocator">
+        <arguments>
+            <argument name="fileName" xsi:type="string">config.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Config\File" type="ShopGo\AdvancedConfig\Model\Config\File">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">ShopGo\AmazonSns\Model\Config\SchemaLocator</argument>
+            <argument name="vendorConfigPath" xsi:type="string">vendor/shopgo/amazon-sns-config/</argument>
+            <argument name="varConfigPath" xsi:type="string">shopgo/amazon_sns/</argument>
+            <argument name="fileName" xsi:type="string">config.xml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\Config" type="ShopGo\AdvancedConfig\Model\Config">
+        <arguments>
+            <argument name="fileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Config\File</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="ShopGo\AmazonSns\Model\Logger\Handler\Base" type="ShopGo\Aws\Model\Logger\Handler\Base">
         <arguments>
             <argument name="logModulePath" xsi:type="string">aws/sns/</argument>
@@ -46,6 +64,7 @@
     </virtualType>
     <virtualType name="ShopGo\AmazonSns\Helper\Utility" type="ShopGo\Aws\Helper\Utility">
         <arguments>
+            <argument name="config" xsi:type="object">ShopGo\AmazonSns\Model\Config</argument>
             <argument name="logger" xsi:type="object">ShopGo\AmazonSns\Model\Logger</argument>
         </arguments>
     </virtualType>
@@ -122,6 +141,25 @@
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">ShopGo\AmazonSns\Model\ResourceModel\Topic\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">TopicGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShopGo\AmazonSns\Model\System\Config\Source\Region" type="ShopGo\Aws\Model\System\Config\Source\Region">
+        <arguments>
+            <argument name="helper" xsi:type="object">ShopGo\AmazonSns\Helper\Data</argument>
+            <argument name="defaultRegion" xsi:type="boolean">false</argument>
+            <argument name="serviceCode" xsi:type="string">sns</argument>
+        </arguments>
+    </virtualType>
+    <type name="ShopGo\AmazonSns\Controller\Adminhtml\Sns\Config\Partition\RetrieveRegionList">
+        <arguments>
+            <argument name="region" xsi:type="object">ShopGo\AmazonSns\Model\System\Config\Source\Region</argument>
+        </arguments>
+    </type>
+    <virtualType name="ShopGo\AmazonSns\Block\Adminhtml\System\Config\Partition" type="ShopGo\Aws\Block\Adminhtml\System\Config\Partition">
+        <arguments>
+            <argument name="systemConfigSection" xsi:type="string">amazon_sns</argument>
+            <argument name="configFieldIdPrefix" xsi:type="string">amazon_sns_general</argument>
+            <argument name="regionListAjaxUrl" xsi:type="string">amazon/sns_config_partition/retrieveregionlist</argument>
         </arguments>
     </virtualType>
 </config>

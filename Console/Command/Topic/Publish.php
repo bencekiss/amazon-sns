@@ -203,7 +203,7 @@ class Publish extends Command
 
         $sns = $this->_snsFactory->create();
         $result = $sns->publish($message, $topicArn, $targetArn, $subject, $messageType, $messageAttributes);
-        $messageId = $sns->getHelper()->getClientResult($result, 'MessageId');
+        $messageId = $sns->getHelper()->getAwsClientResult($result, 'MessageId');
 
         $result = $messageId
             ? 'Topic has been published to successfully!'

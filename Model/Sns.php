@@ -6,8 +6,8 @@
 namespace ShopGo\AmazonSns\Model;
 
 use Aws\Sns\SnsClient;
-use Aws\Sns\MessageValidator\Message;
-use Aws\Sns\MessageValidator\MessageValidator;
+use Aws\Sns\Message as SnsMessage;
+use Aws\Sns\MessageValidator as SnsMessageValidator;
 use Topic as TopicModel;
 
 /**
@@ -58,7 +58,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_client;
 
     /**
-     * @var MessageValidator
+     * @var SnsMessageValidator
      */
     protected $_messageValidator;
 
@@ -85,7 +85,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param MessageValidator $messageValidator
+     * @param SnsMessageValidator $messageValidator
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TopicFactory $topicFactory
@@ -94,7 +94,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        MessageValidator $messageValidator,
+        SnsMessageValidator $messageValidator,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         TopicFactory $topicFactory,
@@ -147,7 +147,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     public function getClient()
     {
         if (!$this->_client) {
-            $this->_client = SnsClient::factory($this->_helper->getClientConfig());
+            $this->_client = SnsClient::factory($this->_helper->getAwsClientConfig());
         }
 
         return $this->_client;
@@ -160,7 +160,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      */
     public function verifyMessageSignature()
     {
-        $message = Message::fromRawPostData();
+        $message = SnsMessage::fromRawPostData();
         return $this->_messageValidator->isValid($message);
     }
 
@@ -231,7 +231,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param string $name
      * @param bool|int $subscribe
      * @param int|string|TopicModel $topicModel
-     * @return \Guzzle\Service\Resource\Model
+     * @return \Aws\Result
      */
     public function createTopic($name, $subscribe = false, $topicModel = 0)
     {
@@ -263,7 +263,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param string $arn
      * @param string $subscriptionArn
      * @param int|string|TopicModel $topicModel
-     * @return \Guzzle\Service\Resource\Model
+     * @return \Aws\Result
      */
     public function deleteTopic($arn, $subscriptionArn = '', $topicModel = 0)
     {
@@ -300,7 +300,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param string $topicArn
      * @param string $protocol
      * @param string $endpoint
-     * @return \Guzzle\Service\Resource\Model
+     * @return \Aws\Result
      */
     public function subscribe($topicArn, $protocol = '', $endpoint = '')
     {
@@ -334,7 +334,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $subscriptionArn
      * @param int|string|TopicModel $topicModel
-     * @return \Guzzle\Service\Resource\Model
+     * @return \Aws\Result
      */
     public function unsubscribe($subscriptionArn, $topicModel = 0)
     {
@@ -359,7 +359,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param string $token
      * @param string $topicArn
      * @param string $authenticateOnUnsubscribe
-     * @return \Guzzle\Service\Resource\Model
+     * @return \Aws\Result
      */
     public function confirmSubscription($token, $topicArn, $authenticateOnUnsubscribe = 'true')
     {
@@ -390,7 +390,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param string $targetArn
      * @param string $messageStructure
      * @param array $messageAttributes
-     * @return \Guzzle\Service\Resource\Model
+     * @return \Aws\Result
      */
     public function publish($message, $topicArn = '', $subject = '', $targetArn = '', $messageStructure = '', $messageAttributes = [])
     {
