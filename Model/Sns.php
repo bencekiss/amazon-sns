@@ -8,6 +8,7 @@ namespace ShopGo\AmazonSns\Model;
 use Aws\Sns\SnsClient;
 use Aws\Sns\Message as SnsMessage;
 use Aws\Sns\MessageValidator as SnsMessageValidator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Topic as TopicModel;
 
 /**
@@ -228,6 +229,28 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Check whether a flag is set in SNS message
+     *
+     * @param array $ifConfig
+     * @return bool
+     */
+    public function isSetMessageFlag($ifConfig)
+    {
+        $flag = true;
+
+        $scope = $ifConfig['scope'] ? $ifConfig['scope'] : ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+        $scopeCode = $ifConfig['scope_code'] ? $ifConfig['scope_code'] : null;
+
+        $config = $this->_helper->getConfig()->getValue($ifConfig['xpath'], $scope, $scopeCode);
+
+        if ($config != $ifConfig['value']) {
+            $flag = false;
+        }
+
+        return $flag;
+    }
+
+    /**
      * Process SNS message
      *
      * @param string $body
@@ -247,6 +270,12 @@ class Sns extends \Magento\Framework\Model\AbstractModel
                 break;
             case self::MESSAGE_TYPE_NOTIFICATION:
                 $message = json_decode($data['Message'], true);
+
+                if (isset($message['arguments']['ifconfig'])) {
+                    if (!$this->isSetMessageFlag($message['arguments']['ifconfig'])) {
+                        break;
+                    }
+                }
 
                 $topic = $this->loadXmlTopic('arn', $data['TopicArn']);
                 if (!isset($topic['name'])) {
