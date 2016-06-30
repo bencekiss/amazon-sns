@@ -73,6 +73,11 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\Config\ReaderInterface
+     */
+    protected $_topicFileConfig;
+
+    /**
      * @var TopicFactory
      */
     protected $_topicFactory;
@@ -88,6 +93,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param SnsMessageValidator $messageValidator
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \ShopGo\AmazonSns\Model\Config\File $topicFileConfig
      * @param TopicFactory $topicFactory
      * @param \ShopGo\AmazonSns\Helper\Data $helper
      */
@@ -97,6 +103,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         SnsMessageValidator $messageValidator,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \ShopGo\AmazonSns\Model\Config\File $topicFileConfig,
         TopicFactory $topicFactory,
         \ShopGo\AmazonSns\Helper\Data $helper
     ) {
@@ -104,6 +111,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         $this->_messageValidator = $messageValidator;
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
+        $this->_topicFileConfig = $topicFileConfig;
         $this->_topicFactory = $topicFactory;
         $this->_helper = $helper;
     }
@@ -194,6 +202,32 @@ class Sns extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load XML topic
+     *
+     * @param string $topicAttribute
+     * @param string $topicAttributeValue
+     * @return array
+     */
+    public function loadXmlTopic($topicAttribute, $topicAttributeValue)
+    {
+        $topic = [];
+        $topicConfigData = [
+            'topic' => [],
+            'item' => ['attributes' => [$topicAttribute => $topicAttributeValue]]
+        ];
+
+        $topicElement = $this->_topicFileConfig->getConfigElement($topicConfigData);
+
+        if ($topicElement !== null) {
+            $topic['name'] = $topicElement->getAttribute('name');
+            $topic['arn'] = $topicElement->getAttribute('arn');
+            $topic['is_active'] = $topicElement->getAttribute('is_active');
+        }
+
+        return $topic;
+    }
+
+    /**
      * Process SNS message
      *
      * @param string $body
@@ -212,12 +246,24 @@ class Sns extends \Magento\Framework\Model\AbstractModel
                 $this->confirmSubscription($data['Token'], $data['TopicArn']);
                 break;
             case self::MESSAGE_TYPE_NOTIFICATION:
-                $topic = $this->loadTopicModel($data['TopicArn']);
-                if ($topic->getIsActive()) {
+                $message = json_decode($data['Message'], true);
+
+                $topic = $this->loadXmlTopic('arn', $data['TopicArn']);
+                if (!isset($topic['name'])) {
+                    $topic = $this->loadTopicModel($data['TopicArn']);
+                    $isTopicActive = $topic->getIsActive();
+                } else {
+                    $isTopicActive = $topic['is_active'];
+                    if ($isTopicActive == '') {
+                        $isTopicActive = 1;
+                    }
+                }
+
+                if ($isTopicActive) {
                     $this->_eventManager->dispatch(
                         self::SNS_EVENT_NOTIFICATION,
                         [
-                            'notification' => json_decode($data['Message'], true)
+                            'notification' => $message
                         ]
                     );
                 }
