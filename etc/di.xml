@@ -89,31 +89,19 @@
             <argument name="utility" xsi:type="object">ShopGo\AmazonSns\Helper\Utility</argument>
         </arguments>
     </type>
-    <virtualType name="ShopGo\AmazonSns\Model\Config\File" type="ShopGo\AdvancedConfig\Model\Config\File">
+    <type name="ShopGo\AmazonSns\Console\Command\Topic\Subscribe">
         <arguments>
-            <argument name="vendorConfigPath" xsi:type="string">vendor/shopgo/amazon-sns-config/</argument>
-            <argument name="varConfigPath" xsi:type="string">shopgo/amazon-sns/</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="ShopGo\AmazonSns\Model\Topic\Config\SchemaLocator" type="ShopGo\AdvancedConfig\Model\Config\SchemaLocator">
-        <arguments>
-            <argument name="fileName" xsi:type="string">topic.xsd</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="ShopGo\AmazonSns\Model\Topic\Config\File" type="ShopGo\AmazonSns\Model\Config\File">
-        <arguments>
-            <argument name="schemaLocator" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\SchemaLocator</argument>
-            <argument name="fileName" xsi:type="string">topic.xml</argument>
-        </arguments>
-    </virtualType>
-    <type name="ShopGo\AmazonSns\Console\Command\Subscribe">
-        <arguments>
-            <argument name="fileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
+            <argument name="topicFileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
         </arguments>
     </type>
-    <type name="ShopGo\AmazonSns\Console\Command\Unsubscribe">
+    <type name="ShopGo\AmazonSns\Console\Command\Topic\Unsubscribe">
         <arguments>
-            <argument name="fileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
+            <argument name="topicFileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
+        </arguments>
+    </type>
+    <type name="ShopGo\AmazonSns\Console\Command\Topic\Publish">
+        <arguments>
+            <argument name="topicFileConfig" xsi:type="object">ShopGo\AmazonSns\Model\Topic\Config\File</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Console\CommandList">
