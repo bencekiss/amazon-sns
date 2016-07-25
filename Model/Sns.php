@@ -94,7 +94,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
      * @param SnsMessageValidator $messageValidator
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \ShopGo\AmazonSns\Model\Config\File $topicFileConfig
+     * @param \Magento\Framework\Config\ReaderInterface $topicFileConfig
      * @param TopicFactory $topicFactory
      * @param \ShopGo\AmazonSns\Helper\Data $helper
      */
@@ -104,7 +104,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         SnsMessageValidator $messageValidator,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \ShopGo\AmazonSns\Model\Config\File $topicFileConfig,
+        \Magento\Framework\Config\ReaderInterface $topicFileConfig,
         TopicFactory $topicFactory,
         \ShopGo\AmazonSns\Helper\Data $helper
     ) {
