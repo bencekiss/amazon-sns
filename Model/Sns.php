@@ -9,12 +9,13 @@ use Aws\Sns\SnsClient;
 use Aws\Sns\Message as SnsMessage;
 use Aws\Sns\MessageValidator as SnsMessageValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Topic as TopicModel;
+use Magento\Framework\Model\AbstractModel;
+use ShopGo\AmazonSns\Model\Topic as TopicModel;
 
 /**
  * SNS model
  */
-class Sns extends \Magento\Framework\Model\AbstractModel
+class Sns extends AbstractModel
 {
     /**
      * SNS message type "subscription confirmation"
@@ -393,7 +394,7 @@ class Sns extends \Magento\Framework\Model\AbstractModel
         ]);
 
         if ($endpoint != $this->getEndpoint()) {
-            Try {
+            try {
                 $topic = $this->loadTopicModel($topicArn);
                 $topic->setEndpointType(
                     \ShopGo\AmazonSns\Model\Topic::ENDPOINT_TYPE_EXTERNAL
