@@ -13,17 +13,21 @@ Amazon SNS
 
 ## <a name="syn"></a>Synopsis
 
-A module that integrates Magento 2 with Amazon SNS.
+A module that integrates Magento 2 with Amazon SNS. This module is a fork of the original shopgo-magento2/amazon-sns module.
 
 ## <a name="over"></a>Overview
 
 Amazon SNS module acts as bridge between Magento 2 and Amazon SNS.
-It adds the following features to Magento 2:
+The original module adds the following features to Magento 2:
 * Create/Delete SNS topics.
 * Subscribe to SNS topics and unsubscribe from them.
 * A ready Magento 2 SNS endpoint that can be used for subscriptions.
 * Publish messages to SNS topics.
 * Dispatch events from received SNS notifications, that other modules could listen to.
+
+These are the forked repo features:
+* Add different endpoints to different topic subscriptions
+* List topics, fill the topic list from an amazon-sns topic list
 
 ## <a name="install"></a>Installation
 
